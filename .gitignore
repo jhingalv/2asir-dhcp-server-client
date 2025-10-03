@@ -1,0 +1,10 @@
+# Ignore Backup Files
+*~
+*.bak
+*.bk
+
+# Ignore Vagrant Dir
+.vagrant/
+
+# Ignore Logs in Any Dir
+**/*.log
