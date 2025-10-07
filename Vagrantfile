@@ -4,6 +4,11 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/jammy64"
 
+  # 2GB of RAM to avoid issues at startup
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+  end
+
   # DHCP SERVER
   config.vm.define "dhcp-sv" do |dhcpsv|
     dhcpsv.vm.hostname = "dhcp-sv.izv.dhcp-sv-cli"
@@ -15,7 +20,7 @@ Vagrant.configure("2") do |config|
     # Internal network (192.168.57.0/24), isolated for DHCP
     dhcpsv.vm.network   "private_network",
                         ip: "192.168.57.10",
-                        virtualbox_intnet: "dhcp-sv-cli_net"
+                        virtualbox__intnet: "dhcp-sv-cli_net"
 
     dhcpsv.vm.provision "shell", path: "provision-dhcpsv.sh"
   end #dhcpsv
@@ -26,8 +31,8 @@ Vagrant.configure("2") do |config|
 
     # Internal network (192.168.57.0/24), isolated for DHCP
     dhcpc1.vm.network   "private_network",
-                        virtualbox_intnet: "dhcp-sv-cli_net",
-                        autoconfig: false
+                        autoconfig: false,
+                        virtualbox__intnet: "dhcp-sv-cli_net"
     
     dhcpc1.vm.provision "shell", path: "provision-dhcpc1.sh"
   end #dhcpc1
