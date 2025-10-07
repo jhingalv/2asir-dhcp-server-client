@@ -22,6 +22,31 @@ Set up a virtualized environment with three virtual machines:
 - Internal network: `192.168.57.0/24`
   - **Server**: static IP `192.168.57.10`
   - **c1** and **c2**: DHCP clients
+---
+
+## DHCP Server Configuration
+
+- Network: `192.168.57.0/24`
+- Dynamic range: `192.168.57.25 - 192.168.57.50`
+- Broadcast address: `192.168.57.255`
+- Gateway: `192.168.57.10`
+- DNS Servers: `8.8.8.8` and `4.4.4.4`
+- Damain name: `micasa.es`
+- Default lease time: `1 day`
+- Maximum lease time: `8 days`
+
+---
+
+## Client Configuration
+- Network mode: `Internal Network`
+- DHCP: `Enabled`
+- Obtain dynamically new IP address command:
+```bash
+sudo dhclient
+```
+- Logs: `/var/log/syslog`
+- Leases file: `/var/lib/dhcp/dhcp.leases`
+  
 
 ---
 
@@ -39,3 +64,5 @@ Initialize the project with the command:
 
 ```bash
 vagrant init
+```
+
