@@ -1,27 +1,27 @@
 #!/bin/bash
 
-# Mostramos lineas para ver errores
+# Show the console lines to see posible errors
 set -exu
 
 apt-get update
 apt-get upgrade -y
 
-# Instalamos el servicio DHCP
+# Install the DHCP service
 apt-get install -y isc-dhcp-server
 
-# Buscamos la interfaz que usará el DHCP
+# Search the DHCP interface
 IFACE=$(ip -o -4 addr show | grep 192.168.57.10 | awk '{print $2}')
 
-# Hacemos que el servicio use la interfaz anterior
+# Make DHCP use that interface
 sed -i "s/^INTERFACESv4=.*/INTERFACESv4=\"$IFACE\"/" /etc/default/isc-dhcp-server
 
-# Reiniciamos el servicio DHCP
+# Restart the DHCP service
 systemctl restart isc-dhcp-server
 
-#Hacemos backup del archivo de configuración DHCP
+# Make a backup of the DHCP config file
 cp /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.bak
 
-#Añadimos la configuración del DHCP al archivo
+# Add the DHCP config to the file
 cat > /etc/dhcp/dhcpd.conf <<EOF
 default-lease-time 86400;   # 1 día (en segundos)
 max-lease-time 691200;      # 8 días (en segundos)
@@ -37,12 +37,12 @@ subnet 192.168.57.0 netmask 255.255.255.0 {
 }
 EOF
 
-# Reiniciamos y habilitamos el servicio para aplicar la configuración
+# Restart and enable the DHCP service to apply changes
 systemctl restart isc-dhcp-server.service
 systemctl enable isc-dhcp-server.service
 
-# Comprobamos que se ha iniciado correctamente
-systemctl status isc-dhcp-server.service --no-pager # --no-pager evita interrupciones
+# Check that the service is running properly
+systemctl status isc-dhcp-server.service --no-pager # --no-pager avoids interruptions
 
-# Comprobamos que el socket está escuchando
+# Check that the socket is listening
 ss -lun
