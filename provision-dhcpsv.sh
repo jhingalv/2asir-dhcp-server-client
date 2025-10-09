@@ -23,9 +23,9 @@ cp /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.bak
 
 # Add the DHCP config to the file
 cat > /etc/dhcp/dhcpd.conf <<EOF
-default-lease-time 86400;   # 1 día (en segundos)
-max-lease-time 691200;      # 8 días (en segundos)
-authoritative;              # Pues es el único sv
+default-lease-time 86400;   # 1 day
+max-lease-time 691200;      # 8 days
+authoritative;              # As it is the only DHCP server
 
 subnet 192.168.57.0 netmask 255.255.255.0 {
   range 192.168.57.25 192.168.57.50;
