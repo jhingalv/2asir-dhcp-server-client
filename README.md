@@ -58,6 +58,15 @@ sudo dhclient
 
 ---
 
+## Files found in this repository
+- **Vagrantfile:** Defines the virtual machines that will be created, with their network configuration.
+- **.gitignore:** It contains the files that will be ignored by the version control system.
+- **LICENSE:** Defines the license of our project, to determine how can be used.
+- **provision-dhcpc1.sh:** Script for the DHCP configuration for virtual machine that runs the client 1.
+- **provision-dhcpsv.sh:** Script for the installation and management of the DHCP server.
+
+---
+
 ## Project Initialization
 
 Initialize the project with the command:
@@ -65,4 +74,5 @@ Initialize the project with the command:
 ```bash
 vagrant init
 ```
+Check if the clients obtain the network correctly with the configuration shown above
 
