@@ -21,6 +21,12 @@ network:
       dhcp4: true
 EOF
 
+# Fix permissions on Netplan to avoid warnings
+chmod 600 /etc/netplan/01-netcfg.yaml
+chown root:root /etc/netplan/01-netcfg.yaml
+chmod 600 /etc/netplan/50-vagrant.yaml
+chown root:root /etc/netplan/50-vagrant.yaml
+
 # Apply the config
 netplan apply
 
