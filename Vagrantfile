@@ -44,7 +44,8 @@ Vagrant.configure("2") do |config|
     # Internal network (192.168.57.0/24), isolated for DHCP
     dhcpc2.vm.network "private_network",
                   type: "dhcp",
-                  virtualbox__intnet: "dhcp-sv-cli_net"
+                  virtualbox__intnet: "dhcp-sv-cli_net",
+                  mac: "080027c2c2c2"
 
     dhcpc2.vm.provision "shell", path: "provision-dhcpc.sh"
   end
