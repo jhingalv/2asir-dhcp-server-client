@@ -72,7 +72,6 @@ sudo dhclient
 Initialize the project with the command:
 
 ```bash
-vagrant init
+vagrant up
 ```
 Check if the clients obtain the network correctly with the configuration shown above
-
