@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
                       type: "dhcp",
                       virtualbox__intnet: "dhcp-sv-cli_net"
     
-    dhcpc1.vm.provision "shell", path: "provision-dhcpc1.sh"
+    dhcpc1.vm.provision "shell", path: "provision-dhcpc.sh"
   end #dhcpc1
   
   # DHCP CLIENT 2 (c2)
@@ -46,7 +46,7 @@ Vagrant.configure("2") do |config|
                   type: "dhcp",
                   virtualbox__intnet: "dhcp-sv-cli_net"
 
-    dhcpc2.vm.provision "shell", path: "provision-dhcpc2.sh"
+    dhcpc2.vm.provision "shell", path: "provision-dhcpc.sh"
   end
 
 end #Vagrant.configure
