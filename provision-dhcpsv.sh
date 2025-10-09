@@ -44,5 +44,8 @@ systemctl enable isc-dhcp-server.service
 # Check that the service is running properly
 systemctl status isc-dhcp-server.service --no-pager # --no-pager avoids interruptions
 
+# Check network config to verify IPs
+ip a
+
 # Check that the socket is listening
 ss -lun
