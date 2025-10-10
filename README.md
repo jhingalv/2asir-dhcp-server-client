@@ -32,7 +32,7 @@ Set up a virtualized environment with three virtual machines, using Vagrant in a
 - Broadcast address: `192.168.57.255`
 - Gateway: `192.168.57.10`
 - DNS Servers: `8.8.8.8` and `4.4.4.4`
-- Damain name: `micasa.es`
+- Domain name: `micasa.es`
 - Default lease time: `1 day`
 - Maximum lease time: `8 days`
   
@@ -124,7 +124,7 @@ end #Vagrant.configure
 ```bash
 #!/bin/bash
 
-# Show the console lines to see posible errors
+# Show the console lines to see possible errors
 set -exu
 
 apt-get update
@@ -168,7 +168,7 @@ ip a
 ```bash
 #!/bin/bash
 
-# Show the console lines to see posible errors
+# Show the console lines to see possible errors
 set -exu
 
 apt-get update

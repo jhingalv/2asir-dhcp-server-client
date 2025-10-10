@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Show the console lines to see posible errors
+# Show the console lines to see possible errors
 set -exu
 
 apt-get update
