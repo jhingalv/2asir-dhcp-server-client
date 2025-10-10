@@ -2,8 +2,8 @@
 
 ## Authors of the project
 
-- **Juan Amador Hinojosa Gálvez** `jhingal3010@ieszaidinvergeles.org`
-- **Álvaro Rodríguez Pulido** `arodpul3005@ieszaidinvergeles.org`
+- **Juan Amador Hinojosa Gálvez** – [jhingal3010@ieszaidinvergeles.org](mailto:jhingal3010@ieszaidinvergeles.org)
+- **Álvaro Rodríguez Pulido** – [arodpul3005@ieszaidinvergeles.org](mailto:arodpul3005@ieszaidinvergeles.org)
 
 ## Practice Objective
 
@@ -13,7 +13,7 @@ Set up a virtualized environment with three virtual machines, using Vagrant in a
 - **Client 1 (c1)** that receives its network configuration via DHCP.
 - **Client 2 (c2)** that gets a fixed IP address based on its MAC address.
 
----
+
 
 ## Network Structure
 
@@ -23,7 +23,7 @@ Set up a virtualized environment with three virtual machines, using Vagrant in a
   - **Server**: static IP `192.168.57.10`
   - **c1:** DHCP IP.
   - **c2:** DHCP IP based on MAC address.
----
+
 
 ## DHCP Server Configuration
 
@@ -36,11 +36,11 @@ Set up a virtualized environment with three virtual machines, using Vagrant in a
 - Default lease time: `1 day`
 - Maximum lease time: `8 days`
   
-**Client 2 MAC address configuration:**
+**MAC address configuration (for Client 2):**
 - MAC: `08:00:27:c2:c2:c2`
 - Fixed address: `192.168.57.4`
 - Default lease time: `1 hour`
----
+
 
 ## Client Configuration
 - Network mode: `Internal Network`
@@ -51,9 +51,7 @@ sudo dhclient
 ```
 - Logs: `/var/log/syslog`
 - Leases file: `/var/lib/dhcp/dhcp.leases`
-  
 
----
 
 ## Prerequisites
 
@@ -61,7 +59,6 @@ sudo dhclient
 - [VirtualBox](https://www.virtualbox.org/)
 - Recommended base box: `ubuntu/jammy64`
 
----
 
 ## Files found in this repository
 - **Vagrantfile:** Defines the virtual machines that will be created, with their network configuration:
@@ -232,7 +229,6 @@ ip a
 ss -lun
 ```
 
----
 
 ## Project Initialization
 
@@ -247,10 +243,50 @@ Vagrant ssh *MACHINE NAME*
 ```
 Check if the clients obtain the network correctly with the configuration shown above:
 ```bash
-ip address
+ip a
 ```
 Request/Renew lease:
 ```bash
 sudo dhclient
 sudo dhclient -r
+```
+
+
+## Error handling
+
+If the DHCP service does not start or clients fail to obtain an IP address, follow these steps to identify and resolve issues:
+
+1. **Check the syntax of the configuration file:**
+```bash
+sudo dhcpd -t
+# (Validates /etc/dhcp/dhcpd.conf and reports syntax errors.)
+```
+
+2. **Inspect service status and logs:**
+```bash
+sudo systemctl status isc-dhcp-server.service
+sudo journalctl -u isc-dhcp-server --no-pager | tail -n 20
+# (Look for messages containing dhcpd: that may indicate parsing errors, invalid subnets, or missing options.)
+```
+
+3. **Verify network interface:**
+```bash
+grep INTERFACESv4 /etc/default/isc-dhcp-server
+ip a
+ss -lun | grep 67
+# (Ensure that the service is listening on the correct interface (UDP port 67).)
+```
+
+4. **Check client connectivity:**
+```bash
+sudo dhclient -r
+sudo dhclient -v
+# (Then, on the server, review /var/log/syslog for messages like DHCPDISCOVER, DHCPOFFER, or DHCPACK.)
+```
+
+5. **Restore backup configuration:**
+```bash
+sudo cp /etc/dhcp/dhcpd.conf.bak /etc/dhcp/dhcpd.conf
+sudo systemctl restart isc-dhcp-server
+# (Use this if configuration errors prevent the service from starting.)
 ```
