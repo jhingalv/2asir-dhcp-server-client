@@ -13,7 +13,9 @@ Set up a virtualized environment with three virtual machines, using Vagrant in a
 - **Client 1 (c1)** that receives its network configuration via DHCP.
 - **Client 2 (c2)** that gets a fixed IP address based on its MAC address.
 
+## Network Diagram
 
+![DHCP Network Diagram](./images/network-diagram.png)
 
 ## Network Structure
 
