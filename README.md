@@ -2,12 +2,12 @@
 
 ## Used Technologies
 
-![Ubuntu 22.04](https://img.shields.io/badge/Ubuntu-22.04-orange)
-![Vagrant 2.4.9](https://img.shields.io/badge/Vagrant-2.4.9-brightgreen)
-![VirtualBox 7.0](https://img.shields.io/badge/VirtualBox-7.0-blue)
-![DHCP Server](https://img.shields.io/badge/DHCP-Server-lightgrey)
-![Bash](https://img.shields.io/badge/Bash-yellow)
-![Ruby](https://img.shields.io/badge/Ruby-red)
+![Ubuntu 22.04](https://img.shields.io/badge/Ubuntu-22.04-orange)&nbsp;
+![Vagrant 2.4.9](https://img.shields.io/badge/Vagrant-2.4.9-brightgreen)&nbsp;
+![VirtualBox 7.0](https://img.shields.io/badge/VirtualBox-7.0-blue)&nbsp;
+![DHCP Server](https://img.shields.io/badge/DHCP-Server-lightgrey)&nbsp;
+![Bash](https://img.shields.io/badge/Bash-yellow)&nbsp;
+![Ruby](https://img.shields.io/badge/Ruby-red)&nbsp;
 
 
 ## Authors of the project
