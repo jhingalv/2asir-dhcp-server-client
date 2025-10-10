@@ -1,5 +1,15 @@
 # 2 ASIR - DHCP - Practice A (Client/Server)
 
+## Used Technologies
+
+![Ubuntu 22.04](https://img.shields.io/badge/Ubuntu-22.04-orange)
+![Vagrant 2.4.9](https://img.shields.io/badge/Vagrant-2.4.9-brightgreen)
+![VirtualBox 7.0](https://img.shields.io/badge/VirtualBox-7.0-blue)
+![DHCP Server](https://img.shields.io/badge/DHCP-Server-lightgrey)
+![Bash](https://img.shields.io/badge/Bash-yellow)
+![Ruby](https://img.shields.io/badge/Ruby-red)
+
+
 ## Authors of the project
 
 - **Juan Amador Hinojosa Gálvez** – [jhingal3010@ieszaidinvergeles.org](mailto:jhingal3010@ieszaidinvergeles.org)
