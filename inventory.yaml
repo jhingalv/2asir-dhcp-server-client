@@ -1,0 +1,25 @@
+all:
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_user: vagrant
+
+  children:
+    dhcp_servers:
+      hosts:
+        dhcp-sv:
+          ansible_host: 192.168.56.10
+          ansible_ssh_private_key_file: .vagrant/machines/dhcp-sv/virtualbox/private_key
+
+    dhcp_clients:
+      # On the clients, the port must be changed if there is
+      # any service running on the ports :2222 / :2200 / :2201
+      hosts:
+        dhcp-c1:
+          ansible_host: 127.0.0.1
+          ansible_port: 2200
+          ansible_ssh_private_key_file: .vagrant/machines/dhcp-c1/virtualbox/private_key
+
+        dhcp-c2:
+          ansible_host: 127.0.0.1
+          ansible_port: 2201
+          ansible_ssh_private_key_file: .vagrant/machines/dhcp-c2/virtualbox/private_key
