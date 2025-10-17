@@ -1,0 +1,103 @@
+---
+- name: Configure DHCP server
+  hosts: dhcp-servers
+  become: true
+
+  tasks:
+    - name: Update package cache and upgrade
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install isc-dhcp-server
+      apt:
+        name: isc-dhcp-server
+        state: present
+
+    - name: Get interface with IP 192.168.57.X
+      shell: ip -o -4 addr show | grep 192.168.57 | awk '{print $2}'
+      register: dhcp_iface
+      changed_when: false
+
+    - name: Configure INTERFACESv4 with the correct interface
+      lineinfile:
+        path: /etc/default/isc-dhcp-server
+        regexp: '^INTERFACESv4='
+        line: 'INTERFACESv4="{{ dhcp_iface.stdout }}"'
+
+    - name: Backup dhcpd.conf (if it does not exist)
+      copy:
+        src: /etc/dhcp/dhcpd.conf
+        dest: /etc/dhcp/dhcpd.conf.bak
+        remote_src: yes
+        force: no
+
+    - name: Copy custom dhcpd.conf file from local machine to servers
+      copy:
+        src: files/sv-dhcpd.conf
+        dest: /etc/dhcp/dhcpd.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Restart and enable isc-dhcp-server
+      systemd:
+        name: isc-dhcp-server
+        state: restarted
+        enabled: yes
+
+    - name: Show status of isc-dhcp-server service
+      shell: systemctl status isc-dhcp-server --no-pager
+      register: status
+      changed_when: false
+
+    - debug:
+        var: status.stdout
+
+
+- name: Configure DHCP client (c1)
+  hosts: dhcp_clients
+  become: true
+
+  tasks:
+    - name: Update package cache and upgrade
+      apt:
+        update_cache: yes
+        upgrade: dist
+    
+    - name: Ensure netplan is installed
+      apt:
+        name: netplan.io
+        state: present
+
+    - name: Ensure isc-dhcp-client is installed
+      apt:
+        name: isc-dhcp-client
+        state: present
+
+    - name: Get the interface name connected to internal network
+      shell: "ip -o link show | awk -F': ' '{print $2}' | grep -v lo | head -n1"
+      register: iface
+      changed_when: false
+
+    - name: Configure netplan to use DHCP on the interface
+      template: # As we need to dynamically replace the if name
+        src: c-netplan.j2 # Template file
+        dest: /etc/netplan/01-netcfg.yaml
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Apply netplan configuration
+      command: netplan apply
+
+    - name: Force DHCP request
+      command: dhclient -v "{{ iface.stdout }}"
+
+    - name: Show current IP configuration
+      command: ip a
+      register: ip_config
+      changed_when: false
+
+    - debug:
+        var: ip_config.stdout
