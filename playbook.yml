@@ -1,6 +1,6 @@
 ---
 - name: Configure DHCP server
-  hosts: dhcp-servers
+  hosts: dhcp-sv
   become: true
 
   tasks:
@@ -81,8 +81,8 @@
       changed_when: false
 
     - name: Configure netplan to use DHCP on the interface
-      template: # As we need to dynamically replace the if name
-        src: c-netplan.j2 # Template file
+      template:
+        src: c-netplan.j2
         dest: /etc/netplan/01-netcfg.yaml
         owner: root
         group: root
