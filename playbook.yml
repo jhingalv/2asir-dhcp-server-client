@@ -5,35 +5,38 @@
 
   tasks:
     - name: Update package cache and upgrade
-      apt:
-        update_cache: yes
+      ansible.builtin.apt:
+        update_cache: true
         upgrade: dist
 
     - name: Install isc-dhcp-server
-      apt:
+      ansible.builtin.apt:
         name: isc-dhcp-server
         state: present
 
     - name: Get interface with IP 192.168.57.X
-      shell: ip -o -4 addr show | grep 192.168.57 | awk '{print $2}'
+      ansible.builtin.shell: |
+        set -o pipefail
+        ip -o -4 addr show | grep 192.168.57 | awk '{print $2}'
       register: dhcp_iface
       changed_when: false
 
     - name: Configure INTERFACESv4 with the correct interface
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/default/isc-dhcp-server
         regexp: '^INTERFACESv4='
         line: 'INTERFACESv4="{{ dhcp_iface.stdout }}"'
 
     - name: Backup dhcpd.conf (if it does not exist)
-      copy:
+      ansible.builtin.copy:
         src: /etc/dhcp/dhcpd.conf
         dest: /etc/dhcp/dhcpd.conf.bak
-        remote_src: yes
-        force: no
+        remote_src: true
+        force: false
+        mode: '0644'
 
     - name: Copy custom dhcpd.conf file from local machine to servers
-      copy:
+      ansible.builtin.copy:
         src: files/sv-dhcpd.conf
         dest: /etc/dhcp/dhcpd.conf
         owner: root
@@ -41,17 +44,19 @@
         mode: '0644'
 
     - name: Restart and enable isc-dhcp-server
-      systemd:
+      ansible.builtin.systemd:
         name: isc-dhcp-server
         state: restarted
-        enabled: yes
+        enabled: true
 
     - name: Show status of isc-dhcp-server service
-      shell: systemctl status isc-dhcp-server --no-pager
+      ansible.builtin.command:
+        cmd: systemctl status isc-dhcp-server --no-pager
       register: status
       changed_when: false
 
-    - debug:
+    - name: Display isc-dhcp-server status
+      ansible.builtin.debug:
         var: status.stdout
 
 
@@ -61,27 +66,29 @@
 
   tasks:
     - name: Update package cache and upgrade
-      apt:
-        update_cache: yes
+      ansible.builtin.apt:
+        update_cache: true
         upgrade: dist
-    
+
     - name: Ensure netplan is installed
-      apt:
+      ansible.builtin.apt:
         name: netplan.io
         state: present
 
     - name: Ensure isc-dhcp-client is installed
-      apt:
+      ansible.builtin.apt:
         name: isc-dhcp-client
         state: present
 
     - name: Get the interface name connected to internal network
-      shell: "ip -o link show | awk -F': ' '{print $2}' | grep -v lo | head -n1"
+      ansible.builtin.shell: |
+        set -o pipefail
+        ip -o link show | awk -F': ' '{print $2}' | grep -v lo | head -n1
       register: iface
       changed_when: false
 
     - name: Configure netplan to use DHCP on the interface
-      template:
+      ansible.builtin.template:
         src: c-netplan.j2
         dest: /etc/netplan/01-netcfg.yaml
         owner: root
@@ -89,15 +96,18 @@
         mode: '0644'
 
     - name: Apply netplan configuration
-      command: netplan apply
+      ansible.builtin.command: netplan apply
+      changed_when: false
 
     - name: Force DHCP request
-      command: dhclient -v "{{ iface.stdout }}"
+      ansible.builtin.command: dhclient -v "{{ iface.stdout }}"
+      changed_when: false
 
     - name: Show current IP configuration
-      command: ip a
+      ansible.builtin.command: ip a
       register: ip_config
       changed_when: false
 
-    - debug:
+    - name: Display current IP configuration
+      ansible.builtin.debug:
         var: ip_config.stdout
