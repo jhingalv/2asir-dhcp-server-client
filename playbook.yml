@@ -18,6 +18,8 @@
       ansible.builtin.shell: |
         set -o pipefail
         ip -o -4 addr show | grep 192.168.57 | awk '{print $2}'
+      args:
+        executable: /bin/bash
       register: dhcp_iface
       changed_when: false
 
@@ -80,10 +82,12 @@
         name: isc-dhcp-client
         state: present
 
-    - name: Get the interface name connected to internal network
+    - name: Get the first active non loopback interface with an IPv4 address
       ansible.builtin.shell: |
         set -o pipefail
-        ip -o link show | awk -F': ' '{print $2}' | grep -v lo | head -n1
+        ip -o -4 addr show scope global | awk '{print $2}' | head -n1
+      args:
+        executable: /bin/bash
       register: iface
       changed_when: false
 
