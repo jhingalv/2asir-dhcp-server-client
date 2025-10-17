@@ -21,8 +21,6 @@ Vagrant.configure("2") do |config|
     dhcpsv.vm.network   "private_network",
                       ip: "192.168.57.10",
                       virtualbox__intnet: "dhcp-sv-cli_net"
-
-    dhcpsv.vm.provision "shell", path: "provision-dhcpsv.sh"
   end #dhcpsv
 
   # DHCP CLIENT 1 (c1)
@@ -33,9 +31,7 @@ Vagrant.configure("2") do |config|
     dhcpc1.vm.network "private_network",
                       type: "dhcp",
                       virtualbox__intnet: "dhcp-sv-cli_net"
-    
-    dhcpc1.vm.provision "shell", path: "provision-dhcpc.sh"
-  end #dhcpc1
+      end #dhcpc1
   
   # DHCP CLIENT 2 (c2)
   config.vm.define "dhcp-c2" do |dhcpc2|
@@ -46,8 +42,13 @@ Vagrant.configure("2") do |config|
                   type: "dhcp",
                   virtualbox__intnet: "dhcp-sv-cli_net",
                   mac: "080027c2c2c2"
+  end #dhcpc2
 
-    dhcpc2.vm.provision "shell", path: "provision-dhcpc.sh"
-  end
+  # Ansible provisioning
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbook.yml"
+    ansible.inventory_path = "inventory.yml"
+    ansible.verbose = "v"
+  end #ansible.provision
 
 end #Vagrant.configure
