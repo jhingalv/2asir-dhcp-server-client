@@ -23,13 +23,12 @@ Set up a virtualized environment with three virtual machines, using Vagrant in a
 - **DHCP Server (sv)** that assigns network configurations automatically.
 - **Client 1 (c1)** that receives its network configuration via DHCP.
 - **Client 2 (c2)** that gets a fixed IP address based on its MAC address.
-- Ansible replaces the provision files for the playbook.yml.
-
+   Ansible replaces the provision files for the playbook.yml.
 
 ## Prerequisites
 
 - [Vagrant](https://www.vagrantup.com/)
-- Recommended base box: `ubuntu/jammy64`
+  - Recommended base box: `ubuntu/jammy64`
 - [VirtualBox](https://www.virtualbox.org/)
 - [Ansible](https://www.ansible.com/)
 - [Python](https://www.python.org/)
