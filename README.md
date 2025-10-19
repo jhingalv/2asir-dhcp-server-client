@@ -1,4 +1,4 @@
-# 2 ASIR - DHCP - Practice A (Client/Server) Ansible integration
+# 2 ASIR - DHCP - Practice A (Client/Server) with Ansible Integration
 
 ## Used Technologies
 
@@ -11,19 +11,21 @@
 ![YAML](https://img.shields.io/badge/YAML-6A0DAD?style=flat)&nbsp;
 ![Ruby](https://img.shields.io/badge/Ruby-red)&nbsp;
 
-## Authors of the project
+## Project Authors
 
 - **Juan Amador Hinojosa Gálvez** – [jhingal3010@ieszaidinvergeles.org](mailto:jhingal3010@ieszaidinvergeles.org)
 - **Álvaro Rodríguez Pulido** – [arodpul3005@ieszaidinvergeles.org](mailto:arodpul3005@ieszaidinvergeles.org)
 
 ## Practice Objective
 
-Set up a virtualized environment with three virtual machines, using Vagrant in a Linux environment, using Ansible for provision. The virtual machines must comply with the next requirements:
+Deploy a virtualized lab environment using **Vagrant** and **VirtualBox**, with network configuration managed via **DHCP**.  
+Provisioning and configuration tasks are automated using **Ansible**.
 
-- **DHCP Server (sv)** that assigns network configurations automatically.
-- **Client 1 (c1)** that receives its network configuration via DHCP.
-- **Client 2 (c2)** that gets a fixed IP address based on its MAC address.
-   Ansible replaces the provision files for the playbook.yml.
+The virtual machines must meet the following requirements:
+
+- A **DHCP server (sv)** that dynamically assigns IP addresses.
+- **Client 1 (c1)** that receives its IP configuration via DHCP.
+- **Client 2 (c2)** that receives a static IP address assigned by the server based on its MAC address.
 
 ## Prerequisites
 
@@ -75,6 +77,7 @@ sudo dhclient
 
 ## Files found in this repository
 - **Vagrantfile:** Defines the virtual machines that will be created, with their network configuration:
+
 ```ruby
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
@@ -130,9 +133,9 @@ Vagrant.configure("2") do |config|
 
 end #Vagrant.configure
 ```
-- **.gitignore:** It contains the files that will be ignored by the version control system.
-- **LICENSE:** Defines the license of our project, to determine how can be used.
+
 - **inventory.yml:** It defines the components of the project, their IP, port and private key.
+
 ```yml
 all:
   vars:
@@ -161,7 +164,9 @@ all:
           ansible_ssh_private_key_file: .vagrant/machines/dhcp-c2/virtualbox/private_key
 
 ```
+
 - **playbook.yml:** It contains the commands and instructions that are given to the virtual machines when initializing.
+
 ```yml
 ---
 - name: Configure DHCP server
@@ -283,11 +288,17 @@ all:
 
 ```
 - **ansible.cfg:** It blocks the ansible deprecation error messages from Vagrant.
+
 ```bash
 [defaults]
 inventory = ./inventory.yml
-deprecation_warnings = False # To suppress deprecation warnings produced by Vagrant
+deprecation_warnings = False 
+# To suppress deprecation warnings mainly produced by Vagrant
 ```
+
+- **.gitignore:** It contains the files that will be ignored by the version control system.
+
+- **LICENSE:** Defines the license of our project, to determine how can be used.
 
 ## Project Initialization
 
