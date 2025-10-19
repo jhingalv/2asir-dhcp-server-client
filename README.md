@@ -18,11 +18,13 @@
 
 ## Practice Objective
 
-Set up a virtualized environment with three virtual machines, using Vagrant in a Linux environment. The virtual machines must comply with the next requirements:
+Set up a virtualized environment with three virtual machines, using Vagrant in a Linux environment, using Ansible for provision. The virtual machines must comply with the next requirements:
 
 - **DHCP Server (sv)** that assigns network configurations automatically.
 - **Client 1 (c1)** that receives its network configuration via DHCP.
 - **Client 2 (c2)** that gets a fixed IP address based on its MAC address.
+- Ansible replaces the provision files for the playbook.yml.
+
 
 ## Prerequisites
 
@@ -132,7 +134,7 @@ end #Vagrant.configure
 - **.gitignore:** It contains the files that will be ignored by the version control system.
 - **LICENSE:** Defines the license of our project, to determine how can be used.
 - **inventory.yml:** It defines the components of the project, their IP, port and private key.
-```bash
+```yml
 all:
   vars:
     ansible_python_interpreter: /usr/bin/python3
@@ -161,7 +163,7 @@ all:
 
 ```
 - **playbook.yml:** It contains the commands and instructions that are given to the virtual machines when initializing.
-```bash
+```yml
 ---
 - name: Configure DHCP server
   hosts: dhcp-sv
@@ -282,7 +284,11 @@ all:
 
 ```
 - **ansible.cfg:** It blocks the ansible deprecation error messages from Vagrant.
-- This variation of the project changes the old provision files for the .yml new ones, you can still find the provision in "old" folder.
+```bash
+[defaults]
+inventory = ./inventory.yml
+deprecation_warnings = False # To suppress deprecation warnings produced by Vagrant
+```
 
 ## Project Initialization
 
